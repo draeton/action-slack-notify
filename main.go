@@ -98,6 +98,11 @@ func main() {
 		Blocks:    blocks,
 	}
 
+	if err := debug(msg); err != nil {
+		fmt.Fprintf(os.Stderr, "Error printing message: %s\n", err)
+		os.Exit(2)
+	}
+
 	if err := send(endpoint, msg); err != nil {
 		fmt.Fprintf(os.Stderr, "Error sending message: %s\n", err)
 		os.Exit(2)
@@ -109,6 +114,15 @@ func envOr(name, def string) string {
 		return d
 	}
 	return def
+}
+
+func debug(msg Webhook) error {
+	enc := json.NewEncoder(os.Stdout)
+	err := enc.Encode(msg)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func send(endpoint string, msg Webhook) error {
