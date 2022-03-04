@@ -33,14 +33,19 @@ type Webhook struct {
 
 type Block struct {
 	Type      string    `json:"type,omitempty"`
-	Text      string    `json:"text,omitempty"`
+	Text      Text      `json:"text,omitempty"`
 	Accessory Accessory `json:"accessory,omitempty"`
 }
 
 type Accessory struct {
 	Type string `json:"type,omitempty"`
-	Text string `json:"text,omitempty"`
+	Text Text   `json:"text,omitempty"`
 	Url  string `json:"url,omitempty"`
+}
+
+type Text struct {
+	Type string `json:"type,omitempty"`
+	Text string `json:"text,omitempty"`
 }
 
 func main() {
@@ -61,7 +66,10 @@ func main() {
 	blocks := []Block{
 		{
 			Type: "section",
-			Text: text,
+			Text: Text{
+				Type: "mrkdwn",
+				Text: text,
+			},
 		},
 	}
 
@@ -70,8 +78,11 @@ func main() {
 	if link != "" {
 		blocks[0].Accessory = Accessory{
 			Type: "button",
-			Text: "view",
-			Url:  link,
+			Text: Text{
+				Type: "plain_text",
+				Text: "view",
+			},
+			Url: link,
 		}
 	}
 
@@ -123,7 +134,8 @@ func send(endpoint string, msg Webhook) error {
 	}
 
 	if res.StatusCode >= 299 {
-		return fmt.Errorf("Error on message: %s\n%s\n", res.Status, json.NewEncoder(os.Stdout).Encode(msg))
+		data, _ := json.MarshalIndent(msg, "", "\t")
+		return fmt.Errorf("Error on message: %s\n%s\n", res.Status, data)
 	}
 	fmt.Println(res.Status)
 	return nil
