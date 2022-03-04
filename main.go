@@ -94,7 +94,10 @@ func main() {
 				Type: "divider",
 			}, {
 				Type: "section",
-				Text: footer,
+				Text: Text{
+					Type: "mrkdwn",
+					Text: footer,
+				},
 			},
 		}
 		blocks = append(blocks, footerBlocks...)
