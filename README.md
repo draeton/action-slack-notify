@@ -42,12 +42,8 @@ By default, action is designed to run with minimal configuration but you can alt
 Variable           | Default                                                 | Purpose
 ------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------
 SLACK_CHANNEL      | Set during Slack webhook creation                       | Specify Slack channel in which message needs to be sent
-SLACK_FOOTER       | Powered By rtCamp's GitHub Actions Library              | Slack message footer.
-SLACK_ICON_EMOJI   | -                                                       | User/Bot icon shown with Slack message, in case you do not wish to add a URL for slack icon as above, you can set slack emoji in this env variable. Example value: `:bell:` or any other valid slack emoji.
-SLACK_LINK_NAMES   | -                                                       | If set to `true`, enable mention in Slack message.
+SLACK_LINKS        | -                                                       | JSON string defining an array of links to display as buttons. Optional
 SLACK_MESSAGE      | Generated from git commit message.                      | The main Slack message.
-SLACK_MESSAGE_LINK | -                                                       | URL for optional button.
-SLACK_USERNAME     | -                                                       | Custom Slack Username sending the message. Does not need to be a "real" username.
 
 You can see the action block with all variables as below:
 
@@ -56,8 +52,8 @@ You can see the action block with all variables as below:
       uses: draeton/action-slack-notify@v3
       env:
         SLACK_CHANNEL: general
+        SLACK_LINKS: '[{"text":"example","url":"https://example.com"}]'
         SLACK_MESSAGE: 'Post Content :rocket:'
-        SLACK_MESSAGE_LINK: 'https://example.com'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 ```
 
