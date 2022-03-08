@@ -17,24 +17,16 @@ const (
 )
 
 type Webhook struct {
-	AsUser  bool          `json:"as_user,omitempty"`
-	Blocks  []interface{} `json:"blocks,omitempty"`
-	Channel string        `json:"channel,omitempty"`
-	Text    string        `json:"text,omitempty"`
+	AsUser  bool    `json:"as_user,omitempty"`
+	Blocks  []Block `json:"blocks,omitempty"`
+	Channel string  `json:"channel,omitempty"`
+	Text    string  `json:"text,omitempty"`
 }
 
-type ActionBlock struct {
-	Type     string   `json:"type,omitempty"`
+type Block struct {
 	Elements []Button `json:"elements,omitempty"`
-}
-
-type DividerBlock struct {
-	Type string `json:"type,omitempty"`
-}
-
-type SectionBlock struct {
-	Type string `json:"type,omitempty"`
-	Text Text   `json:"text,omitempty"`
+	Text     Text     `json:"text,omitempty"`
+	Type     string   `json:"type"`
 }
 
 type Button struct {
@@ -68,8 +60,8 @@ func main() {
 		_ = os.Setenv("GITHUB_WORKFLOW", "Link to action run")
 	}
 
-	blocks := []interface{}{
-		SectionBlock{
+	blocks := []Block{
+		{
 			Type: "section",
 			Text: Text{
 				Type: "mrkdwn",
@@ -98,12 +90,12 @@ func main() {
 			})
 		}
 		blocks = append(blocks,
-			DividerBlock{
+			Block{
 				Type: "divider",
 			},
-			ActionBlock{
-				Type:     "action",
+			Block{
 				Elements: elements,
+				Type:     "action",
 			},
 		)
 	}
