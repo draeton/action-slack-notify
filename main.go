@@ -71,33 +71,38 @@ func main() {
 	}
 
 	var links []Link
-	data := []byte(os.Getenv(EnvSlackLinks))
-	if err := json.Unmarshal(data, &links); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error on parse: %s\n%s\n", err, data)
-		os.Exit(2)
-	}
+	var buttons []Button
 
-	if links != nil {
-		var elements []Button
-		for _, link := range links {
-			elements = append(elements, Button{
-				Type: "button",
-				Text: Text{
-					Type: "plain_text",
-					Text: link.Text,
-				},
-				Url: link.Url,
-			})
+	if str := os.Getenv(EnvSlackLinks); str != "" {
+		if err := json.Unmarshal([]byte(str), &links); err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "Error on parse: %s\n%s\n", err, str)
+			os.Exit(2)
 		}
-		blocks = append(blocks,
-			Block{
-				Type: "divider",
-			},
-			Block{
-				Elements: elements,
-				Type:     "action",
-			},
-		)
+
+		if len(links) > 0 {
+			for _, link := range links {
+				buttons = append(buttons, Button{
+					Type: "button",
+					Text: Text{
+						Type: "plain_text",
+						Text: link.Text,
+					},
+					Url: link.Url,
+				})
+			}
+		}
+
+		if len(buttons) > 0 {
+			blocks = append(blocks,
+				Block{
+					Type: "divider",
+				},
+				Block{
+					Elements: buttons,
+					Type:     "action",
+				},
+			)
+		}
 	}
 
 	msg := Webhook{
