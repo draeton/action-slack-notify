@@ -17,6 +17,7 @@ const (
 )
 
 type Webhook struct {
+	AsUser  bool          `json:"as_user,omitempty"`
 	Blocks  []interface{} `json:"blocks,omitempty"`
 	Channel string        `json:"channel,omitempty"`
 	Text    string        `json:"text,omitempty"`
@@ -108,6 +109,7 @@ func main() {
 	}
 
 	msg := Webhook{
+		AsUser:  false,
 		Blocks:  blocks,
 		Channel: os.Getenv(EnvSlackChannel),
 		Text:    text,
