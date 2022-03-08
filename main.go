@@ -11,8 +11,8 @@ import (
 
 const (
 	EnvSlackChannel = "SLACK_CHANNEL"
-	EnvSlackMessage = "SLACK_MESSAGE"
 	EnvSlackLinks   = "SLACK_LINKS"
+	EnvSlackMessage = "SLACK_MESSAGE"
 	EnvSlackWebhook = "SLACK_WEBHOOK"
 )
 
@@ -78,8 +78,13 @@ func main() {
 	}
 
 	var links []Link
-	err := json.Unmarshal([]byte(os.Getenv(EnvSlackLinks)), &links)
-	if err != nil {
+	data := []byte(os.Getenv(EnvSlackLinks))
+	if err := json.Unmarshal(data, &links); err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "Error on parse: %s\n%s\n", err, data)
+		os.Exit(2)
+	}
+
+	if links != nil {
 		var elements []Button
 		for _, link := range links {
 			elements = append(elements, Button{
