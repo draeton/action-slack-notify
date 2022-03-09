@@ -95,6 +95,10 @@ func main() {
 		if len(buttons) > 0 {
 			blocks = append(blocks,
 				Block{
+					Text: nil,
+					Type: "divider",
+				},
+				Block{
 					Elements: buttons,
 					Text:     nil,
 					Type:     "actions",
