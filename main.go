@@ -107,6 +107,7 @@ func main() {
 		AsUser:  false,
 		Blocks:  blocks,
 		Channel: os.Getenv(EnvSlackChannel),
+		Text:    text,
 	}
 
 	if err := send(endpoint, msg); err != nil {
