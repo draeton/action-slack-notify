@@ -11,7 +11,7 @@ import (
 
 const (
 	EnvSlackChannel = "SLACK_CHANNEL"
-	EnvSlackLinks   = "SLACK_LINKS"
+	EnvSlackFooter  = "SLACK_FOOTER"
 	EnvSlackMessage = "SLACK_MESSAGE"
 	EnvSlackWebhook = "SLACK_WEBHOOK"
 )
@@ -24,25 +24,14 @@ type Webhook struct {
 }
 
 type Block struct {
-	Elements []Button `json:"elements,omitempty"`
-	Text     *Text    `json:"text,omitempty"`
-	Type     string   `json:"type"`
-}
-
-type Button struct {
-	Type string `json:"type,omitempty"`
-	Text *Text  `json:"text,omitempty"`
-	Url  string `json:"url,omitempty"`
+	Elements *[]Text `json:"elements,omitempty"`
+	Text     *Text   `json:"text,omitempty"`
+	Type     string  `json:"type"`
 }
 
 type Text struct {
 	Type string `json:"type,omitempty"`
 	Text string `json:"text,omitempty"`
-}
-
-type Link struct {
-	Text string `json:"text,omitempty"`
-	Url  string `json:"url,omitempty"`
 }
 
 func main() {
@@ -56,55 +45,38 @@ func main() {
 		_, _ = fmt.Fprintln(os.Stderr, "Message is required")
 		os.Exit(1)
 	}
+	footer := os.Getenv(EnvSlackFooter)
 	if strings.HasPrefix(os.Getenv("GITHUB_WORKFLOW"), ".github") {
 		_ = os.Setenv("GITHUB_WORKFLOW", "Link to action run")
 	}
 
 	blocks := []Block{
 		{
-			Type: "section",
 			Text: &Text{
-				Type: "mrkdwn",
 				Text: text,
+				Type: "mrkdwn",
 			},
+			Type: "section",
 		},
 	}
 
-	var links []Link
-	var buttons []Button
-
-	if str := os.Getenv(EnvSlackLinks); str != "" {
-		if err := json.Unmarshal([]byte(str), &links); err != nil {
-			_, _ = fmt.Fprintf(os.Stderr, "Error on parse: %s, `%s`\n", err, str)
-			os.Exit(2)
-		}
-
-		if len(links) > 0 {
-			for _, link := range links {
-				buttons = append(buttons, Button{
-					Type: "button",
-					Text: &Text{
-						Type: "plain_text",
-						Text: link.Text,
+	if footer != "" {
+		blocks = append(blocks,
+			Block{
+				Text: nil,
+				Type: "divider",
+			},
+			Block{
+				Elements: &[]Text{
+					{
+						Text: footer,
+						Type: "mrkdwn",
 					},
-					Url: link.Url,
-				})
-			}
-		}
-
-		if len(buttons) > 0 {
-			blocks = append(blocks,
-				Block{
-					Text: nil,
-					Type: "divider",
 				},
-				Block{
-					Elements: buttons,
-					Text:     nil,
-					Type:     "actions",
-				},
-			)
-		}
+				Text: nil,
+				Type: "context",
+			},
+		)
 	}
 
 	msg := Webhook{
