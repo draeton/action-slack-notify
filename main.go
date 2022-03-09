@@ -75,7 +75,7 @@ func main() {
 
 	if str := os.Getenv(EnvSlackLinks); str != "" {
 		if err := json.Unmarshal([]byte(str), &links); err != nil {
-			_, _ = fmt.Fprintf(os.Stderr, "Error on parse: %s\n%s\n", err, str)
+			_, _ = fmt.Fprintf(os.Stderr, "Error on parse: %s, `%s`\n", err, str)
 			os.Exit(2)
 		}
 
@@ -131,7 +131,7 @@ func send(endpoint string, msg Webhook) error {
 
 	if res.StatusCode >= 299 {
 		data, _ := json.MarshalIndent(msg, "", "\t")
-		return fmt.Errorf("Error on message: %s\n%s\n", res.Status, data)
+		return fmt.Errorf("Error on message: %s, `%s`\n", res.Status, data)
 	}
 	fmt.Println(res.Status)
 	return nil
