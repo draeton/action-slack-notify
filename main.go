@@ -95,13 +95,9 @@ func main() {
 		if len(buttons) > 0 {
 			blocks = append(blocks,
 				Block{
-					Text: nil,
-					Type: "divider",
-				},
-				Block{
 					Elements: buttons,
 					Text:     nil,
-					Type:     "action",
+					Type:     "actions",
 				},
 			)
 		}
@@ -111,7 +107,6 @@ func main() {
 		AsUser:  false,
 		Blocks:  blocks,
 		Channel: os.Getenv(EnvSlackChannel),
-		Text:    text,
 	}
 
 	if err := send(endpoint, msg); err != nil {
