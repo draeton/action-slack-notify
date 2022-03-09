@@ -25,13 +25,13 @@ type Webhook struct {
 
 type Block struct {
 	Elements []Button `json:"elements,omitempty"`
-	Text     Text     `json:"text,omitempty"`
+	Text     *Text    `json:"text,omitempty"`
 	Type     string   `json:"type"`
 }
 
 type Button struct {
 	Type string `json:"type,omitempty"`
-	Text Text   `json:"text,omitempty"`
+	Text *Text  `json:"text,omitempty"`
 	Url  string `json:"url,omitempty"`
 }
 
@@ -63,7 +63,7 @@ func main() {
 	blocks := []Block{
 		{
 			Type: "section",
-			Text: Text{
+			Text: &Text{
 				Type: "mrkdwn",
 				Text: text,
 			},
@@ -83,7 +83,7 @@ func main() {
 			for _, link := range links {
 				buttons = append(buttons, Button{
 					Type: "button",
-					Text: Text{
+					Text: &Text{
 						Type: "plain_text",
 						Text: link.Text,
 					},
