@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 VERSION=v3
-CONTAINER="ghcr.io/draeton/action-slack-notify:$VERSION"
+CONTAINER="ghcr.io/hookerz/action-slack-notify:$VERSION"
 
 # Update tag to latest commit
 git push origin ":refs/tags/$VERSION"

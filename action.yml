@@ -1,9 +1,9 @@
 name: 'Slack Notify'
 description: 'This action will send a notification to Slack'
-author: 'draeton'
+author: 'hookerz'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/draeton/action-slack-notify:v3'
+  image: 'docker://ghcr.io/hookerz/action-slack-notify:v3'
 branding:
   icon: 'bell'
   color: 'yellow'

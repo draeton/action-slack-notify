@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Slack Notification
-      uses: draeton/action-slack-notify@v3
+      uses: hookerz/action-slack-notify@v3
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 ```
@@ -49,7 +49,7 @@ You can see the action block with all variables as below:
 
 ```yml
     - name: Slack Notification
-      uses: draeton/action-slack-notify@v3
+      uses: hookerz/action-slack-notify@v3
       env:
         SLACK_CHANNEL: general
         SLACK_FOOTER: '<https://example.com|Example>'
@@ -80,7 +80,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Slack Notification
-      uses: draeton/action-slack-notify@v3
+      uses: hookerz/action-slack-notify@v3
       env:
         VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
